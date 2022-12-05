@@ -16,6 +16,10 @@
             <form action="{% url 'information/modify_confirm' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
+                    <label for="inputName">请输入姓名</label>
+                    <input type="text" name="name" class="form-control">
+                </div>
+                <div class="form-group">
                     <label for="inputName">请输入年龄</label>
                     <input type="text" name="age" class="form-control">
                 </div>

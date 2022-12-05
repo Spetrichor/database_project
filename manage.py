@@ -6,6 +6,7 @@ import sys
 import pymysql
 
 
+
 def main():
     """Run administrative tasks."""
     conn = pymysql.connect(host='localhost', user='root',
@@ -121,7 +122,6 @@ def main():
     conn.commit()
     cursor.close()
     conn.close()
-
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'new_1.settings')
 
     try:

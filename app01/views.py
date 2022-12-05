@@ -1,5 +1,3 @@
-import datetime
-
 from django.shortcuts import render, redirect, HttpResponse
 from . import functions
 
@@ -69,8 +67,10 @@ def home(request):
 
 def patient(request):
     if request.session.get('is_login', None):
-        result = functions.my_patient(request.session.get('name'),
-                                      request.session.get('type'))
+        if request.session.get('type') == '医生' or request.session.get('type') == '护士长':
+            result = functions.my_patient(request.session.get('name'))
+        if request.session.get('type') == '病房护士':
+            result = functions.my_patient_ward_nurse(request.session.get('name'))
         patients, idx = [], 1
         for i in result:
             data = {'idx': idx, 'id': i[0], 'age': i[1],
@@ -105,8 +105,8 @@ def patient_information(request, name):
         result = functions.patient_history(name)
         informations, idx = [], 1
         for i in result:
-            data = {'idx': idx, 'id': i[0], 'name': i[1],
-                    'date': i[2],
+            data = {'idx': idx, 'id': i[0], 'name': i[2],
+                    'date': i[1],
                     'temperature': i[3], 'positive': i[4]}
             informations.append(data)
             idx += 1
@@ -152,6 +152,7 @@ def modify_information(request):
 
 def modify_information_confirm(request):
     if request.method == 'POST':  # 接收到post请求
+        name = request.POST.get('name')
         age = request.POST.get('age')  # 获得参数并保留到变量
         gender = request.POST.get('gender')
         section = request.POST.get('section')  # html标签传递的数据
@@ -159,7 +160,7 @@ def modify_information_confirm(request):
             return render(request, 'information_modify.html', {'error': 0, 'cur': 1})
         if gender != '男' and gender != '女':
             return render(request, 'information_modify.html', {'error': 1, 'cur': 1})
-        if functions.modify_information(request.session.get('name'), age, gender, section):
+        if functions.modify_information(request.session.get('name'), name, age, gender, section):
             return redirect('/information/')
         else:  # 若上述函数没有成功执行
             return render(request, 'information_modify.html', {'error': 2, 'cur': 1})
@@ -176,14 +177,13 @@ def report_confirm(request):
     if request.method == 'POST':  # 接收到post请求
         id = request.POST.get('id')  # 获得参数并保留到变量
         name = request.POST.get('name')
-        date = request.POST.get('date')  # html标签传递的数据
         positive = request.POST.get('positive')  # html标签传递的数据
         user = functions.find_patient(name)
         if not user:
             return render(request, 'report.html', {'error': 0, 'cur': 4})
         if request.session.get('type') != '医生':
             return render(request, 'report.html', {'error': 2, 'cur': 4})
-        if functions.new_report(id, name, date, positive):
+        if functions.new_report(id, name, positive):
             return HttpResponse("提交成功!")
         else:  # 若上述函数没有成功执行
             return render(request, 'report.html', {'error': 1, 'cur': 4})
@@ -198,7 +198,6 @@ def patient_add(request):
 
 def patient_add_confirm(request):
     if request.method == 'POST':  # 接收到post请求
-        id = request.POST.get('id')  # 获得参数并保留到变量
         name = request.POST.get('name')
         age = request.POST.get('age')
         gender = request.POST.get('gender')  # html标签传递的数据
@@ -208,7 +207,7 @@ def patient_add_confirm(request):
         ward_nurse = request.POST.get('ward_nurse')
         if request.session.get('type') != '急诊护士':
             return render(request, 'patient_add.html', {'error': 0, 'cur': 2})
-        if functions.new_patient(id, name, age, gender, level, section, ward_name, ward_nurse):
+        if functions.new_patient(name, age, gender, level, section, ward_name, ward_nurse):
             return HttpResponse("提交成功!")
         else:  # 若上述函数没有成功执行
             return render(request, 'patient_add.html', {'error': 1, 'cur': 2})
