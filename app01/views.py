@@ -1,6 +1,6 @@
 import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from . import functions
 
 
@@ -59,6 +59,7 @@ def home(request):
             request.session['is_login'] = True
             request.session['name'] = user[0][0]
             request.session['password'] = user[0][1]
+            request.session['type'] = user[0][2]
             return render(request, 'home.html', {'cur': 0})
         else:
             return render(request, 'login.html', {'error': True})  # 登陆失败则返回错误标签
@@ -68,7 +69,8 @@ def home(request):
 
 def patient(request):
     if request.session.get('is_login', None):
-        result = functions.my_patient(request.session.get('name'), request.session.get('password'))
+        result = functions.my_patient(request.session.get('name'),
+                                      request.session.get('type'))
         patients, idx = [], 1
         for i in result:
             data = {'idx': idx, 'id': i[0], 'age': i[1],
@@ -154,10 +156,59 @@ def modify_information_confirm(request):
         gender = request.POST.get('gender')
         section = request.POST.get('section')  # html标签传递的数据
         if section != '轻症区域' and section != '重症区域' and section != '危重症区域':  # 如果已经找到user，证明用户名重复，返回error类型为0
-            return render(request, 'information_modify.html', {'error': 0,'cur':1})
+            return render(request, 'information_modify.html', {'error': 0, 'cur': 1})
         if gender != '男' and gender != '女':
-            return render(request, 'information_modify.html', {'error': 1,'cur':1})
+            return render(request, 'information_modify.html', {'error': 1, 'cur': 1})
         if functions.modify_information(request.session.get('name'), age, gender, section):
             return redirect('/information/')
         else:  # 若上述函数没有成功执行
-            return render(request, 'information_modify.html', {'error': 2,'cur':1})
+            return render(request, 'information_modify.html', {'error': 2, 'cur': 1})
+
+
+def report(request):
+    if request.session.get('is_login', None):
+        return render(request, 'report.html', {'cur': 4})
+    else:
+        return redirect('/login/')
+
+
+def report_confirm(request):
+    if request.method == 'POST':  # 接收到post请求
+        id = request.POST.get('id')  # 获得参数并保留到变量
+        name = request.POST.get('name')
+        date = request.POST.get('date')  # html标签传递的数据
+        positive = request.POST.get('positive')  # html标签传递的数据
+        user = functions.find_patient(name)
+        if not user:
+            return render(request, 'report.html', {'error': 0, 'cur': 4})
+        if request.session.get('type') != '医生':
+            return render(request, 'report.html', {'error': 2, 'cur': 4})
+        if functions.new_report(id, name, date, positive):
+            return HttpResponse("提交成功!")
+        else:  # 若上述函数没有成功执行
+            return render(request, 'report.html', {'error': 1, 'cur': 4})
+
+
+def patient_add(request):
+    if request.session.get('is_login', None):
+        return render(request, 'patient_add.html', {'cur': 2})
+    else:
+        return redirect('/login/')
+
+
+def patient_add_confirm(request):
+    if request.method == 'POST':  # 接收到post请求
+        id = request.POST.get('id')  # 获得参数并保留到变量
+        name = request.POST.get('name')
+        age = request.POST.get('age')
+        gender = request.POST.get('gender')  # html标签传递的数据
+        level = request.POST.get('level')  # html标签传递的数据
+        section = request.POST.get('section')
+        ward_name = request.POST.get('ward_name')
+        ward_nurse = request.POST.get('ward_nurse')
+        if request.session.get('type') != '急诊护士':
+            return render(request, 'patient_add.html', {'error': 0, 'cur': 2})
+        if functions.new_patient(id, name, age, gender, level, section, ward_name, ward_nurse):
+            return HttpResponse("提交成功!")
+        else:  # 若上述函数没有成功执行
+            return render(request, 'patient_add.html', {'error': 1, 'cur': 2})

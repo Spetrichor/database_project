@@ -26,8 +26,10 @@
                     </button>
                 </div>
             </form>
+            <a style="" href="{% url 'patient/add' %}">
+                <button class="btn btn-primary btn-sm" style="margin-left: 30px; height: 40px;">添加新员工</button>
+            </a>
 
-            <!--            <a style="" href="{% url 'worker_add' %}"><button class="btn btn-primary btn-sm" style="margin-left: 30px; height: 40px;">添加新员工</button></a>-->
         </div>
 
     </div>
@@ -65,6 +67,10 @@
                     <td>{{ patient.ward_name }}</td>
                     <td>{{ patient.ward_nurse }}</td>
                     <td>
+                        <a href="#">
+                            <button class="btn btn-primary btn-sm">修改</button>
+                        </a>
+
                         <a href="{% url 'patient/patient_information' patient.name %}">
                             <button class="btn btn-primary btn-sm">详细</button>
                         </a>

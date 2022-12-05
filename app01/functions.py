@@ -10,7 +10,7 @@ def find_name_password(username, password):
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
         # 这里面存在使用mysql加密和解密的过程，密码可以得到保护，后端是无法直接获取密码的
-        sql = "select username,AES_DECRYPT(password,'coco') as password from staff where username = \'{username}\' \
+        sql = "select username,AES_DECRYPT(password,'coco') as password,type from staff where username = \'{username}\' \
         and password = AES_ENCRTPT((\'{password}\'),'coco');".format(
             username=username,
             password=password)
@@ -204,20 +204,20 @@ def find_patient(name):
 
 
 # 急诊护士新增病人
-def new_patient(id, name, age, gender, level, section, ward_id, ward_nurse):
+def new_patient(id, name, age, gender, level, section, ward_name, ward_nurse):
     try:
         db = pymysql.connect(host='localhost', user='root',
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
-        sql = "insert into patient(id,name,age,gender,level,section,ward_id,ward_nurse) values({id},\'{name}\'," \
-              "\'{age}\',\'{gender}\',\'{level}\',\'{section}\',\'{ward_id}\',\'{ward_nurse}\')".format(
+        sql = "insert into patient(id,name,age,gender,level,section,ward_name,ward_nurse) values({id},\'{name}\'," \
+              "\'{age}\',\'{gender}\',\'{level}\',\'{section}\',\'{ward_name}\',\'{ward_nurse}\')".format(
             id=id,
             name=name,
             age=age,
             gender=gender,
             level=level,
             section=section,
-            ward_id=ward_id,
+            ward_name=ward_name,
             ward_nurse=ward_nurse
         )
         cursor.execute(sql)

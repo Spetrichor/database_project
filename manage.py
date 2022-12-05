@@ -114,8 +114,8 @@ def main():
              patient_id bigint not null,\
              dates date not null,\
             patient_name varchar(255) null,\
-    temperature vachar(255) null,\
-                positive varchar(255) null\
+    temperature varchar(255) null,\
+                positive varchar(255) null,\
        foreign key (patient_id) references patient(id)\
                );")
     conn.commit()
