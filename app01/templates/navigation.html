@@ -1,0 +1,98 @@
+
+<nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="#" style="margin-left: 20px;">疫情病房管理</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+
+        {% if cur == 0 %}
+            <li class="nav-item active">
+            <a class="nav-link" href="{% url 'home' %}">主页</a>
+          </li>
+        {% endif %}
+        {% if cur != 0 %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">主页</a>
+          </li>
+        {% endif %}
+        {% if cur == 1 %}
+            <li class="nav-item active">
+            <a class="nav-link" href="{% url 'information' %}">个人信息</a>
+          </li>
+        {% endif %}
+        {% if cur != 1 %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'information' %}">个人信息</a>
+          </li>
+        {% endif %}
+        {% if cur == 2 %}
+            <li class="nav-item active">
+            <a class="nav-link" href="{% url 'patient' %}">我的病人</a>
+          </li>
+        {% endif %}
+        {% if cur != 2 %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'patient' %}">我的病人</a>
+          </li>
+        {% endif %}
+        {% if cur == 3 %}
+            <li class="nav-item active">
+            <a class="nav-link" href="{% url 'nurses' %}">职工一览</a>
+          </li>
+        {% endif %}
+        {% if cur != 3 %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'nurses' %}">职工一览</a>
+          </li>
+        {% endif %}
+        {% if cur == 4 %}
+            <li class="nav-item active">
+            <a class="nav-link" href="{% url 'report' %}">核酸检测</a>
+          </li>
+        {% endif %}
+        {% if cur != 4 %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'report' %}">核酸检测</a>
+          </li>
+        {% endif %}
+<!--        {% if cur == 5 %}-->
+<!--            <li class="nav-item active">-->
+<!--            <a class="nav-link" href="{% url 'salary' %}">薪资管理</a>-->
+<!--          </li>-->
+<!--        {% endif %}-->
+<!--        {% if cur != 5 %}-->
+<!--            <li class="nav-item">-->
+<!--            <a class="nav-link" href="{% url 'salary' %}">薪资管理</a>-->
+<!--          </li>-->
+<!--        {% endif %}-->
+<!--        {% if cur == 6 %}-->
+<!--            <li class="nav-item active">-->
+<!--            <a class="nav-link" href="{% url 'reward' %}">奖惩管理</a>-->
+<!--          </li>-->
+<!--        {% endif %}-->
+<!--        {% if cur != 6 %}-->
+<!--            <li class="nav-item">-->
+<!--            <a class="nav-link" href="{% url 'reward' %}">奖惩管理</a>-->
+<!--          </li>-->
+<!--        {% endif %}-->
+<!--        {% if cur == 7 %}-->
+<!--            <li class="nav-item active">-->
+<!--            <a class="nav-link" href="{% url 'account' %}">账号管理</a>-->
+<!--          </li>-->
+<!--        {% endif %}-->
+<!--        {% if cur != 7 %}-->
+<!--            <li class="nav-item">-->
+<!--            <a class="nav-link" href="{% url 'account' %}">账号管理</a>-->
+<!--          </li>-->
+<!--        {% endif %}-->
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">退出登录</a>
+          </li>
+
+        </ul>
+    </div>
+
+</nav>

@@ -109,6 +109,15 @@ def main():
          patient_name varchar(255) null,\
          staff varchar(255) null\
         );")
+    cursor.execute("create table if not exists patient_information\
+            (\
+             patient_id bigint not null,\
+             dates date not null,\
+            patient_name varchar(255) null,\
+    temperature vachar(255) null,\
+                positive varchar(255) null\
+       foreign key (patient_id) references patient(id)\
+               );")
     conn.commit()
     cursor.close()
     conn.close()

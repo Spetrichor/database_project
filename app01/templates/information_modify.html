@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改个人信息</title>
+    <link rel="stylesheet" href="{% static 'dist/css/bootstrap.min.css' %}">
+</head>
+<body>
+
+<div class="register-block" style="margin-top: 200px; margin-left: 700px;">
+    <h1>修改个人信息</h1>
+    <div class="card" style="width: 400px; margin-top: 50px; margin-left: 40px;">
+        <div class="card-body">
+            <form action="{% url 'information/modify_confirm' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="inputName">请输入年龄</label>
+                    <input type="text" name="age" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword">请输入性别</label>
+                    <input type="text" name="gender" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="inputType">请输入所在区域</label>
+                    <input type="text" name="section" class="form-control">
+                </div>
+                {% if error == 0 %}
+                <p style="font-size:13px; color: red; white-space: nowrap;
+                      align-items:center; line-height:40px; padding-left: 3px">没有此区域</p>
+                {% endif %}
+                {% if error == 1 %}
+                <p style="font-size:13px; color: red; white-space: nowrap;
+                      align-items:center; line-height:40px; padding-left: 3px">没有此性别</p>
+                {% endif %}
+                {% if error == 2 %}
+                <p style="font-size:13px; color: red; white-space: nowrap;
+                      align-items:center; line-height:40px; padding-left: 3px">出错了！</p>
+                {% endif %}
+                <button class="btn btn-primary" type="submit">确定</button>
+            </form>
+        </div>
+    </div>
+    <div class="login-choice" style="margin-top: 10px; margin-left: 60px;">
+        <a href="{% url 'information' %}">返回</a>
+    </div>
+</div>
+
+<script src="{% static 'jquery/jquery-3.5.1.js' %}"></script>
+<script src="{% static 'jquery/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'dist/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+</html>
