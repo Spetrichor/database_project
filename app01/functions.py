@@ -9,9 +9,9 @@ def find_name_password(username, password):
         db = pymysql.connect(host='localhost', user='root',
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
-        # 这里面存在使用mysql加密和解密的过程，密码可以得到保护，后端是无法直接获取密码的
+        # 这里面存在使用mysql加密的过程，密码可以得到保护，后端是无法直接获取密码的
         sql = "select username,password,type from staff where username = \'{username}\' \
-        and password = \'{password}\'".format(
+        and password = PASSWORD(\'{password}\')".format(
             username=username,
             password=password)
         cursor.execute(sql)
@@ -28,7 +28,7 @@ def add_user(username, password, type):
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
         sql = "insert into staff(username, password, type) values " \
-              "(\'{name_value}\',\'{password}\', \'{type_value}\');".format(name_value=username,
+              "(\'{name_value}\',PASSWORD(\'{password}\'), \'{type_value}\');".format(name_value=username,
                                                                             password=password,
                                                                             type_value=type)
         cursor.execute(sql)
@@ -137,12 +137,12 @@ def doctor_modify_my_patient(id, level, status):
         db = pymysql.connect(host='localhost', user='root',
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
-        sql = "update patient level=\'{level}\',status=\'{status}\' where id=\'{id}\'".format(level=level,
+        sql = "update patient set level=\'{level}\',status=\'{status}\' where id=\'{id}\'".format(level=level,
                                                                                               status=status,
                                                                                               id=id)
         cursor.execute(sql)
         db.commit()
-        sql = "update ward_beds sickbeds=sickbeds+1 where ward_id in (select ward_id from patient where id={id} and status='出院')".format(
+        sql = "update ward_beds set sickbeds=sickbeds+1 where ward_id in (select ward_id from patient where id={id} and status='出院')".format(
             id=id)
         cursor.execute(sql)
         db.commit()
@@ -157,14 +157,14 @@ def chiefnuerse_modify_my_patient(id, section, ward_id, ward_name):
         db = pymysql.connect(host='localhost', user='root',
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
-        sql = "update ward_beds sickbeds=sickbeds+1 where ward_id in (select ward_id from patient where id={id})".format(
+        sql = "update ward_beds set sickbeds=sickbeds+1 where ward_id in (select ward_id from patient where id={id})".format(
             id=id)
         cursor.execute(sql)
         db.commit()
-        sql = "update ward_beds sickbeds=sickbeds-1 where ward_id={ward_id}".format(ward_id=ward_id)
+        sql = "update ward_beds set sickbeds=sickbeds-1 where ward_id={ward_id}".format(ward_id=ward_id)
         cursor.execute(sql)
         db.commit()
-        sql = "update patient section=\'{section}\',ward_id={ward_id},ward_name=\'{ward_name}\' where " \
+        sql = "update patient set section=\'{section}\',ward_id={ward_id},ward_name=\'{ward_name}\' where " \
               "id=\'{id}\'".format(
             section=section,
             ward_id=ward_id,
@@ -186,8 +186,8 @@ def section_nurses(username):
         db = pymysql.connect(host='localhost', user='root',
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
-        sql = "select name,gender,type from staff where section in (select section from staff where username=\'{" \
-              "username}\'); ".format(username=username)
+        sql = "select name,gender,type from staff where section in (select section from staff where username=\'{username}\'); ".format(
+            username=username)
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -226,7 +226,7 @@ def new_patient(name, age, gender, level, section, ward_name, ward_nurse):
         )
         cursor.execute(sql)
         db.commit()
-        sql = "update ward_beds sickbeds=sickbeds-1 where ward_id=\'{ward_id}\'".format(ward_id=ward_id)
+        sql = "update ward_beds set sickbeds=sickbeds-1 where ward_id=\'{ward_id}\'".format(ward_id=ward_name)
         cursor.execute(sql)
         db.commit()
         return True
@@ -259,7 +259,7 @@ def new_temperature(id, name, date, temperature):
         db = pymysql.connect(host='localhost', user='root',
                              password='6369', port=3306, db='project_new_1')
         cursor = db.cursor()
-        sql = "update patient_information temperature=\'{temperature}\' where id={id} and date=\'{date}\'".format(
+        sql = "update patient_information set temperature=\'{temperature}\' where id={id} and date=\'{date}\'".format(
             temperature=temperature,
             id=id,
             date=date

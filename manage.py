@@ -15,15 +15,16 @@ def main():
     cursor.execute("create table if not exists staff\
         (\
          id bigint not null primary key,\
-         birth varchar(255) null,\
+         age varchar(255) null,\
          name varchar(255) null,\
          password varchar(255) null,\
          section varchar(255) null,\
          type varchar(255) null,\
          username varchar(255) null,\
+         gender varchar(255) null,\
          constraint unique_user\
          unique (username)\
-        );")
+        )DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists patient\
         (\
          id bigint not null primary key,\
@@ -31,31 +32,29 @@ def main():
          gender varchar(255) null,\
          level varchar(255) null,\
          name varchar(255) null,\
-         quarantined bit not null,\
          section varchar(255) null,\
-         sickbed int not null,\
          status int not null,\
          ward_name varchar(255) null,\
-         ward_nurse varchar(255) null);\
+         ward_nurse varchar(255) null)DEFAULT CHARSET=utf8;\
         ")
     cursor.execute("create table if not exists section(id bigint not null primary key,\
          chief_nurse varchar(255) null,\
          doctor varchar(255) null,\
-         level varchar(255) null);")
+         level varchar(255) null)DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists section_ward_nurses\
         (\
          section_id bigint not null,\
          ward_nurses varchar(255) null,\
          constraint list_ward_nurses\
          foreign key (section_id) references section (id)\
-        );")
+        )DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists section_wards\
         (\
          section_id bigint not null,\
          wards varchar(255) null,\
          constraint list_wards\
          foreign key (section_id) references section (id)\
-        );")
+        )DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists ward\
         (\
          id bigint not null primary key,\
@@ -64,7 +63,7 @@ def main():
          name varchar(255) null,\
          constraint unique_ward_name\
          unique (name)\
-        );\
+        )DEFAULT CHARSET=utf8;\
         ")
     cursor.execute("create table if not exists ward_patients\
         (\
@@ -72,14 +71,14 @@ def main():
          patients varchar(255) null,\
          constraint list_patients\
          foreign key (ward_id) references ward (id)\
-        );")
+        )DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists ward_sickbeds\
         (\
          ward_id bigint not null,\
          sickbeds int null,\
          constraint list_sickbeds\
          foreign key (ward_id) references ward (id)\
-        );")
+        )DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists report\
         (\
          id bigint not null primary key,\
@@ -89,7 +88,7 @@ def main():
          patient_id bigint null,\
          patient_name varchar(255) null,\
          positive bit not null\
-        );\
+        )DEFAULT CHARSET=utf8;\
         ")
     cursor.execute("create table if not exists daily_info\
         (\
@@ -101,7 +100,7 @@ def main():
          symptom varchar(255) null,\
          temperature double not null,\
          ward_nurse varchar(255) null\
-        );")
+        )DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists message\
         (\
          id bigint not null primary key,\
@@ -109,7 +108,7 @@ def main():
          patient_id bigint null,\
          patient_name varchar(255) null,\
          staff varchar(255) null\
-        );")
+        )DEFAULT CHARSET=utf8;")
     cursor.execute("create table if not exists patient_information\
             (\
              patient_id bigint not null,\
@@ -118,7 +117,7 @@ def main():
     temperature varchar(255) null,\
                 positive varchar(255) null,\
        foreign key (patient_id) references patient(id)\
-               );")
+               )DEFAULT CHARSET=utf8;")
     conn.commit()
     cursor.close()
     conn.close()
